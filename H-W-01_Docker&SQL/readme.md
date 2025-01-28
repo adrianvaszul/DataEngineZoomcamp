@@ -27,7 +27,7 @@ Python 3.12.7
 Docker version 26.1.3, build 26.1.3-0ubuntu1~24.04.1
 ```
 
-## First question
+## Question N°1
 
 > Run docker with the python:3.12.8 image in an interactive mode, use the entrypoint bash. What's the version of pip in the image?
 
@@ -39,12 +39,12 @@ root@4cbc8a01ac2f:/# pip -V
 pip 24.3.1 from /usr/local/lib/python3.12/site-packages/pip (python 3.12)
 ```
 
-## Second question
+## Question N°2
 > Given the following docker-compose.yaml, what is the hostname and port that pgadmin should use to connect to the postgres database?
 
 Is db:5433 or db:5432
 
-## Third question
+## Question N°3
 > During the period of October 1st 2019 (inclusive) and November 1st 2019 (exclusive), how many trips, respectively, happened:
 > + Up to 1 mile
 > + In between 1 (exclusive) and 3 miles (inclusive),
@@ -52,9 +52,9 @@ Is db:5433 or db:5432
 > + In between 7 (exclusive) and 10 miles (inclusive),
 > + Over 10 miles
 
-To do this, first I ingest data related with the green taxi trips in NY. More info HERE
-Some additional information: https://www.nyc.gov/assets/tlc/downloads/pdf/data_dictionary_trip_records_yellow.pdf
+To do this, first I ingest data related with the green taxi trips in NY. More info [HERE](https://github.com/adrianvaszul/DataEngineZoomcamp/blob/main/H-W-01_Docker%26SQL/ingest.md).
 
+Then I executed this SQL querys:
 
 ```
 SELECT COUNT(*) AS "Up to 1 mile"
@@ -82,6 +82,172 @@ FROM green_trip_2019
 WHERE lpep_pickup_datetime >= '2019-10-01'  AND lpep_dropoff_datetime < '2019-11-01'
   AND trip_distance > 10;
 ```
+And the output was:
+
+```
++--------------+
+| Up to 1 mile |
+|--------------|
+| 104802       |
++--------------+
+SELECT 1
++--------------+
+| 1 to 3 miles |
+|--------------|
+| 198924       |
++--------------+
+SELECT 1
++--------------+
+| 3 to 7 miles |
+|--------------|
+| 109603       |
++--------------+
+SELECT 1
++---------------+
+| 7 to 10 miles |
+|---------------|
+| 27678         |
++---------------+
+SELECT 1
++---------------+
+| Over 10 miles |
+|---------------|
+| 35189         |
++---------------+
+```
+
+## Question N°4
+
+> Which was the pick up day with the longest trip distance? Use the pick up time for your calculations.
+
+```
+SELECT *
+FROM green_trip_2019
+WHERE lpep_pickup_datetime >= '2019-10-11'  AND lpep_pickup_datetime < '2019-10-12'
+ORDER BY trip_distance DESC
+LIMIT 1;
+
+SELECT *
+FROM green_trip_2019
+WHERE lpep_pickup_datetime >= '2019-10-24'  AND lpep_pickup_datetime < '2019-10-25'
+ORDER BY trip_distance DESC
+LIMIT 1;
+
+SELECT *
+FROM green_trip_2019
+WHERE lpep_pickup_datetime >= '2019-10-26'  AND lpep_pickup_datetime < '2019-10-27'
+ORDER BY trip_distance DESC
+LIMIT 1;
+
+SELECT *
+FROM green_trip_2019
+WHERE lpep_pickup_datetime >= '2019-10-31'  AND lpep_pickup_datetime < '2019-11-01'
+ORDER BY trip_distance DESC
+LIMIT 1;
+```
+
+```
++--------+----------+----------------------+-----------------------+--------------------+------------+------------->
+| index  | VendorID | lpep_pickup_datetime | lpep_dropoff_datetime | store_and_fwd_flag | RatecodeID | PULocationID>
+|--------+----------+----------------------+-----------------------+--------------------+------------+------------->
+| 141174 | 2        | 2019-10-11 20:34:21  | 2019-10-11 22:40:41   | N                  | 4          | 126         >
++--------+----------+----------------------+-----------------------+--------------------+------------+------------->
+SELECT 1
++--------+----------+----------------------+-----------------------+--------------------+------------+------------->
+| index  | VendorID | lpep_pickup_datetime | lpep_dropoff_datetime | store_and_fwd_flag | RatecodeID | PULocationID>
+|--------+----------+----------------------+-----------------------+--------------------+------------+------------->
+| 293111 | 2        | 2019-10-24 10:59:58  | 2019-10-24 13:11:58   | N                  | 1          | 14          >
++--------+----------+----------------------+-----------------------+--------------------+------------+------------->
+SELECT 1
++--------+----------+----------------------+-----------------------+--------------------+------------+------------->
+| index  | VendorID | lpep_pickup_datetime | lpep_dropoff_datetime | store_and_fwd_flag | RatecodeID | PULocationID>
+|--------+----------+----------------------+-----------------------+--------------------+------------+------------->
+| 317407 | 2        | 2019-10-26 03:02:39  | 2019-10-26 07:44:59   | N                  | 5          | 36          >
++--------+----------+----------------------+-----------------------+--------------------+------------+------------->
+SELECT 1
++--------+----------+----------------------+-----------------------+--------------------+------------+------------->
+| index  | VendorID | lpep_pickup_datetime | lpep_dropoff_datetime | store_and_fwd_flag | RatecodeID | PULocationID>
+|--------+----------+----------------------+-----------------------+--------------------+------------+------------->
+| 386795 | 2        | 2019-10-31 23:23:41  | 2019-11-01 13:01:07   | N                  | 5          | 129         >
++--------+----------+----------------------+-----------------------+--------------------+------------+------------->
 
 
+
+
+---------+--------------------+------------+--------------+--------------+-----------------+---------------+------->
+datetime | store_and_fwd_flag | RatecodeID | PULocationID | DOLocationID | passenger_count | trip_distance | fare_a>
+---------+--------------------+------------+--------------+--------------+-----------------+---------------+------->
+:40:41   | N                  | 4          | 126          | 265          | 5               | 95.78         | 473.0 >
+---------+--------------------+------------+--------------+--------------+-----------------+---------------+------->
+
+---------+--------------------+------------+--------------+--------------+-----------------+---------------+------->
+datetime | store_and_fwd_flag | RatecodeID | PULocationID | DOLocationID | passenger_count | trip_distance | fare_a>
+---------+--------------------+------------+--------------+--------------+-----------------+---------------+------->
+:11:58   | N                  | 1          | 14           | 265          | 1               | 90.75         | 238.0 >
+---------+--------------------+------------+--------------+--------------+-----------------+---------------+------->
+---------+--------------------+------------+--------------+--------------+-----------------+---------------+------->
+datetime | store_and_fwd_flag | RatecodeID | PULocationID | DOLocationID | passenger_count | trip_distance | fare_a>
+---------+--------------------+------------+--------------+--------------+-----------------+---------------+------->
+:44:59   | N                  | 5          | 36           | 265          | 1               | 91.56         | 250.0 >
+---------+--------------------+------------+--------------+--------------+-----------------+---------------+------->
+---------+--------------------+------------+--------------+--------------+-----------------+---------------+------->
+datetime | store_and_fwd_flag | RatecodeID | PULocationID | DOLocationID | passenger_count | trip_distance | fare_a>
+---------+--------------------+------------+--------------+--------------+-----------------+---------------+------->
+:01:07   | N                  | 5          | 129          | 265          | 1               | 515.89        | 100.0 >
+---------+--------------------+------------+--------------+--------------+-----------------+---------------+------->
+```
+
+## Question N°5
+> Which were the top pickup locations with over 13,000 in total_amount (across all trips) for 2019-10-18? \
+> Consider only lpep_pickup_datetime when filtering by date.
+
+```
+SELECT green_trip_2019."PULocationID", taxi_zone."Zone", SUM(total_amount) AS "Total_Paid"
+FROM green_trip_2019
+JOIN taxi_zone ON green_trip_2019."PULocationID" = taxi_zone."LocationID"
+WHERE lpep_pickup_datetime >= '2019-10-18'  AND lpep_pickup_datetime < '2019-10-19'
+GROUP BY "PULocationID", taxi_zone."Zone"
+HAVING SUM(total_amount) >= 13000
+ORDER BY "Total_Paid" DESC
+LIMIT 5;
+```
+
+```
++--------------+---------------------+--------------------+
+| PULocationID | Zone                | Total_Paid         |
+|--------------+---------------------+--------------------|
+| 74           | East Harlem North   | 18686.68000000006  |
+| 75           | East Harlem South   | 16797.260000000075 |
+| 166          | Morningside Heights | 13029.790000000034 |
++--------------+---------------------+--------------------+
+```
+
+
+## Question N°6
+> For the passengers picked up in October 2019 in the zone named "East Harlem North" which was the drop off zone that had the largest tip?
+
+```
+SELECT green_trip_2019."PULocationID", zoneini."Zone" AS "CityPU",
+green_trip_2019."DOLocationID", zoneend."Zone" AS "CityDO",
+tip_amount
+FROM green_trip_2019
+JOIN taxi_zone zoneini ON green_trip_2019."PULocationID" = zoneini."LocationID"
+JOIN taxi_zone zoneend ON green_trip_2019."DOLocationID" = zoneend."LocationID"
+WHERE lpep_pickup_datetime >= '2019-10-01'  AND lpep_pickup_datetime < '2019-11-01'
+AND zoneini."Zone" = 'East Harlem North'
+ORDER BY "tip_amount" DESC
+LIMIT 5;
+```
+
+```
++--------------+-------------------+--------------+-------------------+------------+
+| PULocationID | CityPU            | DOLocationID | CityDO            | tip_amount |
+|--------------+-------------------+--------------+-------------------+------------|
+| 74           | East Harlem North | 132          | JFK Airport       | 87.3       |
+| 74           | East Harlem North | 263          | Yorkville West    | 80.88      |
+| 74           | East Harlem North | 74           | East Harlem North | 40.0       |
+| 74           | East Harlem North | 74           | East Harlem North | 35.0       |
+| 74           | East Harlem North | 1            | Newark Airport    | 26.45      |
++--------------+-------------------+--------------+-------------------+------------+
+```
 

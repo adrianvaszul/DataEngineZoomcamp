@@ -1,5 +1,7 @@
 # Ingest Data
 
+Some additional information: https://www.nyc.gov/assets/tlc/downloads/pdf/data_dictionary_trip_records_yellow.pdf
+
 To ingest data to the postgres, I downloaded two files with these commands:
 
 `wget https://github.com/DataTalksClub/nyc-tlc-data/releases/download/green/green_tripdata_2019-10.csv.gz`

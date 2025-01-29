@@ -8,9 +8,44 @@ To ingest data to the postgres, I downloaded two files with these commands:
 
 `wget https://github.com/DataTalksClub/nyc-tlc-data/releases/download/misc/taxi_zone_lookup.csv`
 
-Then I execute the next python script:
-
+Then I executed the next python script called `Step_toSQL.py` with the followed command and arguments to ingest the file `green_tripdata_2019-10.csv`:
 ```
+$ python Step_toSQL.py --change green_tripdata_2019-10.csv green_trip_2019
+```
+
+Lastly I executed the same python script with other arguments to ingest the file `taxi_zone_lookup.csv`:
+```
+$ python Step_toSQL.py taxi_zone_lookup.csv taxi_zone
+```
+With this I successfully loaded two tables to postgres:
+```
+root@localhost:ny_taxi> \d
++--------+-----------------+-------+-------+
+| Schema | Name            | Type  | Owner |
+|--------+-----------------+-------+-------|
+| public | green_trip_2019 | table | root  |
+| public | taxi_zone       | table | root  |
++--------+-----------------+-------+-------+
+```
+with the followed size:
+```
+root@localhost:ny_taxi> SELECT COUNT(*) AS nrows_zone FROM taxi_zone; SELECT COUNT(*) AS nrows_taxi FROM green_trip_
+ 2019
++------------+
+| nrows_zone |
+|------------|
+| 265        |
++------------+
+SELECT 1
++------------+
+| nrows_taxi |
+|------------|
+| 476386     |
++------------+
+```
+
+### Step_toSQL.py
+```python
 import pandas as pd
 from sqlalchemy import create_engine
 from time import time

@@ -1,5 +1,7 @@
 # Homework 01: Docker & SQL
 
+REFERENCE: https://github.com/DataTalksClub/data-engineering-zoomcamp/blob/main/cohorts/2025/01-docker-terraform/homework.md
+
 Environment on which these commands were executed:
 + OS: Windows 11
 + WSL2 version: `PS C:\Users\Adrian> wsl --version`
